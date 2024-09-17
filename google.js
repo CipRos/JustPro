@@ -14,6 +14,7 @@
 // @require      https://github.com/CipRos/JustPro/raw/main/testmanager.js
 // @run-at       document-start
 // @grant        none
+// @noframes
 // ==/UserScript==
 
 (async function () {
@@ -21,18 +22,18 @@
 
     if (window.top !== window.self) return;
 
-    const runningUnderSM = 'undefined' !== typeof JPTestManager;
+    const runningUnderSM = ('undefined' !== typeof JPTestManager);
     console.log(`Running in a script manager? ${runningUnderSM}`);
-    if(runningUnderSM){
+    if(!runningUnderSM){
         var links = ["https://code.jquery.com/jquery-3.7.1.min.js",
-"https://unpkg.com/xhook@latest/dist/xhook.min.js",
-"https://cdnjs.jsdelivr.net/npm/tweakpane@3.1.4/dist/tweakpane.min.js",
-"https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js",
-"https://unpkg.com/@tweenjs/tweenjs.js@^23.1.3/dist/tween.umd.js",
-"https://raw.githubusercontent.com/sgsvnk/GM_SuperValue/master/GM_SuperValue.js",
-"https://github.com/CipRos/JustPro/raw/main/testmanager.js"]
+                     "https://unpkg.com/xhook@latest/dist/xhook.min.js",
+                     "https://cdn.jsdelivr.net/npm/tweakpane@3.1.4/dist/tweakpane.min.js",
+                     "https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js",
+                     "https://unpkg.com/@tweenjs/tween.js@23.1.3/dist/tween.umd.js",
+                     "https://raw.githubusercontent.com/sgsvnk/GM_SuperValue/master/GM_SuperValue.js",
+                     "https://github.com/CipRos/JustPro/raw/main/testmanager.js"]
         for (var it=0; it<links.length; it++){
-            fetch(links[it]).then(r => r.text()).then(r => eval(r))
+            fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it])).then(r=>r.text()).then(t => eval(t));
         }
     }
 
@@ -101,12 +102,9 @@
             if (settings["Bypass Console"] == false) oldlog(...args)
         }
 
-        window.log = log
-
         console.log("[JP] Hooking network...")
         xhook.before(function (request, response) {
             if (request.url == ("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")) {
-                console.log(1)
                 response.text = response.text.replace(settings.logourl);
             }
         });
@@ -413,10 +411,10 @@
         // fade(element)
         // unfade(element)
         // dragElement(element)
-        
+        function animate(n) { requestAnimationFrame(animate); TWEEN.update(n); }; function generateRandomString(n) { let r = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", t = "", e = r.length; for (let o = 0; o < n; o++)t += r.charAt(Math.floor(Math.random() * e)); return t }; function log(e) { let t = new Date().toLocaleTimeString().slice(0, -3); templog.logs += firstlog ? `[${t}] ${e}` : `\n[${t}] ${e}`, firstlog = !1 } function waitForFocus() { return new Promise(e => { let t = () => { focused ? e() : setTimeout(t, 10) }; t() }) } function addHours(e, t = new Date) { return t.setTime(t.getTime() + 36e5 * e), t } function isValidHttpUrl(e) { let t; try { t = new URL(e) } catch (n) { return !1 } return "http:" === t.protocol || "https:" === t.protocol || "blob:" === t.protocol || "base64:" === t.protocol } function sleep(e) { return new Promise(t => setTimeout(t, e)) } async function waitFor(e, t = 50) { for (; !window.hasOwnProperty(e);)await new Promise(e => setTimeout(e, t)) } function waitForElm(e) { return new Promise(t => { if (document.querySelector(e)) return t(document.querySelector(e)); let n = new MutationObserver(o => { document.querySelector(e) && (t(document.querySelector(e)), n.disconnect()) }); n.observe(document.body, { childList: !0, subtree: !0 }) }) } function fade(e) { var t = 1, n = setInterval(function () { t <= .1 && (clearInterval(n), e.style.display = "none"), e.style.opacity = t, e.style.filter = "alpha(opacity=" + 100 * t + ")", t -= .25 * t }, 10) } function unfade(e) { var t = .1; e.style.display = "block"; var n = setInterval(function () { t >= 1 && clearInterval(n), e.style.opacity = t, e.style.filter = "alpha(opacity=" + 100 * t + ")", t += .15 * t }, 10) } function dragElement(e) { var t = 0, n = 0, o = 0, l = 0; function r(e) { (e = e || window.event).preventDefault(), t = o - e.clientX, n = l - e.clientY, o = e.clientX, l = e.clientY, base.style.top = base.offsetTop - n + "px", base.style.left = base.offsetLeft - t + "px" } function i() { document.onmouseup = null, document.onmousemove = null } e.onmousedown = function e(t) { (t = t || window.event).preventDefault(), o = t.clientX, l = t.clientY, document.onmouseup = i, document.onmousemove = r } }
 
     } catch (e) {
-        console.log(e)
+        console.error(e)
         if (e.type == "nomatchingcontroller") {
             nmc(e);
         }
