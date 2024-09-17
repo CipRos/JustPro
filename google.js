@@ -11,15 +11,18 @@
 // @require      https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js
 // @require      https://unpkg.com/@tweenjs/tween.js@^23.1.3/dist/tween.umd.js
 // @require      https://raw.githubusercontent.com/sgsvnk/GM_SuperValue/master/GM_SuperValue.js
-// @require      temptest
+// @require      https://github.com/CipRos/JustPro/raw/main/testmanager.js
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
 
 (async function () {
     'use strict';
-
     if (window.top !== window.self) return;
+
+    const runningUnderSM = 'undefined' !=== typeof JPTestManager;
+    console.log(`Running in a script manager? ${runningUnderSM}`);
+    
     // init saved settings
     const defaultSettings = {
         show: true,
