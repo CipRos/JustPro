@@ -1,17 +1,11 @@
 // ==UserScript==
 // @name         JustPRO DEMO OPTIMIZED
 // @namespace    none
-// @version      2.1.8
+// @version      2.1.9
 // @description  Developing...
 // @author       C1PRI
 // @match        *://www.google.com
-// @require      https://github.com/CipRos/JustPro/raw/main/testmanager.js
-// @require      https://code.jquery.com/jquery-3.7.1.min.js
-// @require      https://unpkg.com/xhook@latest/dist/xhook.min.js
-// @require      https://cdn.jsdelivr.net/npm/tweakpane@3.1.4/dist/tweakpane.min.js
-// @require      https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js
-// @require      https://unpkg.com/@tweenjs/tween.js@^23.1.3/dist/tween.umd.js
-// @require      https://raw.githubusercontent.com/sgsvnk/GM_SuperValue/master/GM_SuperValue.js
+
 // @run-at       document-start
 // @grant        none
 // @noframes
@@ -51,12 +45,22 @@
             var plist = []
             for (var it=0; it<links.length; it++){
                 //fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it])).then(r=>r.text()).then(t => eval(t));
-                plist[it] = fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it])).then(r=>r.json()).then(j => eval(j.contents))//r.text()).then(t => eval(t));
+                plist[it] = fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it]))//.then(r=>r.json()).then(j => eval(j.contents))//r.text()).then(t => eval(t));
             }
-            Promise.all(plist).then(() => {linksLoaded = true;})
+            Promise.all(plist).then((res) => {
+                Promise.all(res.map((item) => {
+                    return item.json();
+                })).then(data => eval.call(window, data.contents));
+                //for(var a=0; a<pelist.length; a++){
+                //    alert(pelist[a])
+                //    pelist[a].then(r=>r.json()).then(j => eval(j.contents))
+                //}
+                linksLoaded = true;
+            })
         }
 
-        while(!linksLoaded){await sleep(1);}
+        while(!linksLoaded){await sleep(100);console.log('undefined' !== typeof xhook);}
+        console.log("Links loaded.");
 
         // 1. LOAD SETTINGS
 
