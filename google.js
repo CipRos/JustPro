@@ -32,7 +32,7 @@
 "https://raw.githubusercontent.com/sgsvnk/GM_SuperValue/master/GM_SuperValue.js",
 "https://github.com/CipRos/JustPro/raw/main/testmanager.js"]
         for (var it=0; it<links.length; it++){
-            fetch().then(r => r.text()).then(r => eval(r))
+            fetch(links[it]).then(r => r.text()).then(r => eval(r))
         }
     }
 
