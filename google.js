@@ -21,7 +21,7 @@
     'use strict';
 
     if (window.top !== window.self) return;
-
+    var linksLoaded = false;
     const runningUnderSM = ('undefined' !== typeof JPTestManager);
     console.log(`Running in a script manager? ${runningUnderSM}`);
     if(!runningUnderSM){
@@ -31,13 +31,15 @@
                      "https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js",
                      "https://unpkg.com/@tweenjs/tween.js@23.1.3/dist/tween.umd.js",
                      "https://raw.githubusercontent.com/sgsvnk/GM_SuperValue/master/GM_SuperValue.js"]
+        var plist = []
         for (var it=0; it<links.length; it++){
-            fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it])).then(r=>r.text()).then(t => eval(t));
+            //fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it])).then(r=>r.text()).then(t => eval(t));
+            plist[it] = fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it])).then(r=>r.text()).then(t => eval(t));
         }
+        Promise.all(plist).then(() => {linksLoaded = true;})
     }
 
-    await waitFor("Tweakpane");
-    await waitFor("xhook")
+    while(!linksLoaded){await sleep(1);}
 
     // init saved settings
     const defaultSettings = {
