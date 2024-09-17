@@ -5,13 +5,13 @@
 // @description  Developing...
 // @author       C1PRI
 // @match        *://www.google.com
+// @require      https://github.com/CipRos/JustPro/raw/main/testmanager.js
 // @require      https://code.jquery.com/jquery-3.7.1.min.js
 // @require      https://unpkg.com/xhook@latest/dist/xhook.min.js
 // @require      https://cdn.jsdelivr.net/npm/tweakpane@3.1.4/dist/tweakpane.min.js
 // @require      https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js
 // @require      https://unpkg.com/@tweenjs/tween.js@^23.1.3/dist/tween.umd.js
 // @require      https://raw.githubusercontent.com/sgsvnk/GM_SuperValue/master/GM_SuperValue.js
-// @require      https://github.com/CipRos/JustPro/raw/main/testmanager.js
 // @run-at       document-start
 // @grant        none
 // @noframes
@@ -30,12 +30,14 @@
                      "https://cdn.jsdelivr.net/npm/tweakpane@3.1.4/dist/tweakpane.min.js",
                      "https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js",
                      "https://unpkg.com/@tweenjs/tween.js@23.1.3/dist/tween.umd.js",
-                     "https://raw.githubusercontent.com/sgsvnk/GM_SuperValue/master/GM_SuperValue.js",
-                     "https://github.com/CipRos/JustPro/raw/main/testmanager.js"]
+                     "https://raw.githubusercontent.com/sgsvnk/GM_SuperValue/master/GM_SuperValue.js"]
         for (var it=0; it<links.length; it++){
             fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it])).then(r=>r.text()).then(t => eval(t));
         }
     }
+
+    await waitFor("Tweakpane");
+    await waitFor("xhook")
 
     // init saved settings
     const defaultSettings = {
@@ -419,6 +421,12 @@
             nmc(e);
         }
     }
+
+    async function waitFor(val, inte = 50) {
+        while(!window.hasOwnProperty(val)){
+            await new Promise(resolve => setTimeout(resolve, inte));
+        }
+    };
 
     function nmc(e, testing=false){
         $.notify("[JP] Fatal error! Click to see details.", { position: "bottom left", className: "error", gap: 10, clickToHide: false, autoHide: false })
