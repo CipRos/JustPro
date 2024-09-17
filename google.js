@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JustPRO DEMO OPTIMIZED
 // @namespace    none
-// @version      2.1.7
+// @version      2.1.8
 // @description  Developing...
 // @author       C1PRI
 // @match        *://www.google.com
@@ -51,7 +51,7 @@
             var plist = []
             for (var it=0; it<links.length; it++){
                 //fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it])).then(r=>r.text()).then(t => eval(t));
-                plist[it] = fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it])).then(r=>r.json()).then(j => eval(j.body.contents))//r.text()).then(t => eval(t));
+                plist[it] = fetch("https://api.allorigins.win/get?url="+ encodeURIComponent(links[it])).then(r=>r.json()).then(j => eval(j.contents))//r.text()).then(t => eval(t));
             }
             Promise.all(plist).then(() => {linksLoaded = true;})
         }
