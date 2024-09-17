@@ -18,11 +18,24 @@
 
 (async function () {
     'use strict';
+
     if (window.top !== window.self) return;
 
     const runningUnderSM = 'undefined' !== typeof JPTestManager;
     console.log(`Running in a script manager? ${runningUnderSM}`);
-    
+    if(runningUnderSM){
+        var links = ["https://code.jquery.com/jquery-3.7.1.min.js",
+"https://unpkg.com/xhook@latest/dist/xhook.min.js",
+"https://cdnjs.jsdelivr.net/npm/tweakpane@3.1.4/dist/tweakpane.min.js",
+"https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js",
+"https://unpkg.com/@tweenjs/tweenjs.js@^23.1.3/dist/tween.umd.js",
+"https://raw.githubusercontent.com/sgsvnk/GM_SuperValue/master/GM_SuperValue.js",
+"https://github.com/CipRos/JustPro/raw/main/testmanager.js"]
+        for (var it=0; it<links.length; it++){
+            fetch().then(r => r.text()).then(r => eval(r))
+        }
+    }
+
     // init saved settings
     const defaultSettings = {
         show: true,
@@ -410,28 +423,28 @@
     }
 
     function nmc(e, testing=false){
-            $.notify("[JP] Fatal error! Click to see details.", { position: "bottom left", className: "error", gap: 10, clickToHide: false, autoHide: false })
-            $(".notifyjs-wrapper").on('click', function () {
-                $(".notifyjs-wrapper").prop("onclick", null);
-                $(this).trigger('notify-hide');
-                if (confirm("JustPro failed! \nError: " + e.message + "\n\nJustPro will try to fix this error, proceed?")) {
-                    //fix settings
-                    var tofix = e.message.slice(28, -1)
-                    var savedSettings = JSON.parse(localStorage.getItem("justpro"))
-                    if(!testing){
+        $.notify("[JP] Fatal error! Click to see details.", { position: "bottom left", className: "error", gap: 10, clickToHide: false, autoHide: false })
+        $(".notifyjs-wrapper").on('click', function () {
+            $(".notifyjs-wrapper").prop("onclick", null);
+            $(this).trigger('notify-hide');
+            if (confirm("JustPro failed! \nError: " + e.message + "\n\nJustPro will try to fix this error, proceed?")) {
+                //fix settings
+                var tofix = e.message.slice(28, -1)
+                var savedSettings = JSON.parse(localStorage.getItem("justpro"))
+                if(!testing){
                     savedSettings[tofix] = defaultSettings[tofix]
                     localStorage.setItem("justpro", JSON.stringify(savedSettings));
-                    }
-
-                    //test it
-                    var tempSavedSettings = JSON.parse(localStorage.getItem("justpro"))
-                    if (testing ? true : (tempSavedSettings[tofix] !== undefined)) {
-                        $.notify("[JP] Error successfully saved! Refresh page to update.", { position: "bottom left", className: "success", gap: 10 })
-                    } else {
-                        $.notify("[JP] Could not fix error! Check Dev Console.", { position: "bottom left", className: "error", gap: 10, clickToHide: false, autoHide: false })
-                    }
                 }
-            });
-            return;
-        }
+
+                //test it
+                var tempSavedSettings = JSON.parse(localStorage.getItem("justpro"))
+                if (testing ? true : (tempSavedSettings[tofix] !== undefined)) {
+                    $.notify("[JP] Error successfully saved! Refresh page to update.", { position: "bottom left", className: "success", gap: 10 })
+                } else {
+                    $.notify("[JP] Could not fix error! Check Dev Console.", { position: "bottom left", className: "error", gap: 10, clickToHide: false, autoHide: false })
+                }
+            }
+        });
+        return;
+    }
 })();
