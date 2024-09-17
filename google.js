@@ -20,7 +20,7 @@
     'use strict';
     if (window.top !== window.self) return;
 
-    const runningUnderSM = 'undefined' !=== typeof JPTestManager;
+    const runningUnderSM = 'undefined' !== typeof JPTestManager;
     console.log(`Running in a script manager? ${runningUnderSM}`);
     
     // init saved settings
