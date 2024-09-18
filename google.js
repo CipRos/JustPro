@@ -39,7 +39,7 @@
     };
 
     try {
-        const runningUnderSM = 0//('undefined' !== typeof JPTestManager);
+        const runningUnderSM = ('undefined' !== typeof JPTestManager);
         console.log(`Running in a script manager? ${runningUnderSM}`);
         if(!runningUnderSM){
             var oldfetch = fetch
