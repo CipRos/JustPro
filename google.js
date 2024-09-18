@@ -45,6 +45,13 @@
         var temptime = { clock: "" };
         var focused = true;
 
+                let settings = JSON.parse(localStorage.getItem("justpro")) || defaultSettings;
+        if (!localStorage.getItem("justpro")) {
+            settings.firstrun = true;
+            localStorage.setItem("justpro", JSON.stringify(settings));
+        } else {
+            settings.firstrun = false;
+        }
                 // Hook console.log for protection
         var oldlog = console.log
         console.log = function (...args) {
@@ -53,7 +60,6 @@
                 tempstring += args[i]
             }
             log(tempstring)
-            if(typeof settings === undefined) return;
             if (settings["Bypass Console"] == false) oldlog(...args)
         }
         
@@ -89,21 +95,6 @@
         }
 
         // 1. LOAD SETTINGS
-
-        // init per-session settings
-        var firstlog = true;
-        var templog = { logs: "" };
-        var temptime = { clock: "" };
-        var focused = true;
-
-        let settings = JSON.parse(localStorage.getItem("justpro")) || defaultSettings;
-        if (!localStorage.getItem("justpro")) {
-            settings.firstrun = true;
-            localStorage.setItem("justpro", JSON.stringify(settings));
-        } else {
-            settings.firstrun = false;
-        }
-
         for (const [key, value] of Object.entries(defaultSettings)) {
             if (settings[key] !== undefined) continue;
             log("fixing setting \"" + key + "\"")
