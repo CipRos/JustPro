@@ -39,6 +39,24 @@
     };
 
     try {
+// init per-session settings
+        var firstlog = true;
+        var templog = { logs: "" };
+        var temptime = { clock: "" };
+        var focused = true;
+
+                // Hook console.log for protection
+        var oldlog = console.log
+        console.log = function (...args) {
+            var tempstring = "";
+            for (var i = 0; i < args.length; i++) {
+                tempstring += args[i]
+            }
+            log(tempstring)
+            if(typeof settings === undefined) return;
+            if (settings["Bypass Console"] == false) oldlog(...args)
+        }
+        
         const runningUnderSM = ('undefined' !== typeof JPTestManager);
         console.log(`Running in a script manager? ${runningUnderSM}`);
         if(!runningUnderSM){
@@ -107,18 +125,6 @@
         }
 
         // 2. HOOKS
-
-        // Hook console.log for protection
-        var oldlog = console.log
-        console.log = function (...args) {
-            var tempstring = "";
-            for (var i = 0; i < args.length; i++) {
-                tempstring += args[i]
-            }
-            log(tempstring)
-            if (settings["Bypass Console"] == false) oldlog(...args)
-        }
-
         console.log("[JP] Hooking network...")
         xhook.before(function (request, response) {
             if (request.url == ("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")) {
